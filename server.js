@@ -26,10 +26,15 @@ io.on('connection', socket => {
   socket.on('join-room', (roomId, userId) => {
     socket.join(roomId);
     socket.to(roomId).broadcast.emit('user-connected', userId);
+    // messages
+    socket.on('message', message => {
+      io.to(roomId).emit('createMessage', message)
+    })
   })
 });
 
 const port = 3030;
+
 
 server.listen(port, () => {
   console.log('Runing on port:', port);
